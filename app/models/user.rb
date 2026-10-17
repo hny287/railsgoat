@@ -2,6 +2,7 @@
 require "encryption"
 
 class User < ApplicationRecord
+  has_many :expenses
   validates :password, presence: true,
                        confirmation: true,
                        length: {within: 6..40},

@@ -33,6 +33,15 @@ Railsgoat::Application.routes.draw do
 
   end
 
+  resources :expenses, only: [:index, :show, :create, :update] do
+    member do
+      post "approve"
+      post "reimburse"
+      get "receipt"
+    end
+    collection { get "export" }
+  end
+
   get "download" => "benefit_forms#download"
   get "upload" => "benefit_forms#redirect_to_benefit_forms"
   post "upload" => "benefit_forms#upload"
