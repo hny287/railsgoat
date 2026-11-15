@@ -3,7 +3,8 @@ class PasswordResetsController < ApplicationController
   skip_before_action :authenticated
 
   def reset_password
-    user = Marshal.load(Base64.decode64(params[:user])) unless params[:user].nil?
+    # the reset form carries the emailed token, checked again here — never a serialized user object
+    user = params[:token].present? && is_valid?(params[:token].to_s) ? @user : nil
 
     if user && params[:password] && params[:confirm_password] && params[:password] == params[:confirm_password]
       user.password = params[:password]

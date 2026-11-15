@@ -5,7 +5,7 @@ class ExpensesController < ApplicationController
   def index
     @expenses = current_user.expenses
     if params[:q].present?
-      @expenses = Expense.where("user_id = #{current_user.id} AND description LIKE '%#{params[:q]}%'")
+      @expenses = current_user.expenses.where("description LIKE ?", "%#{Expense.sanitize_sql_like(params[:q].to_s)}%")
     end
     render json: @expenses
   end
@@ -51,6 +51,6 @@ class ExpensesController < ApplicationController
   end
 
   def export
-    send_file Rails.root.join("exports", params[:file])
+    send_file Rails.root.join("exports", File.basename(params[:file].to_s))
   end
 end
